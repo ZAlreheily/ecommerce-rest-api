@@ -1,0 +1,23 @@
+{
+  "name": "ecommerce-rest-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZAlreheily/ecommerce-rest-api.git"
+  },
+  "author": "Ziad Alreheily",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZAlreheily/ecommerce-rest-api/issues"
+  },
+  "homepage": "https://github.com/ZAlreheily/ecommerce-rest-api#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.8.4"
+  }
+}
