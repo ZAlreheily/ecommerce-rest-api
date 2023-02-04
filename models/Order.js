@@ -3,7 +3,14 @@ const mongoose = require("mongoose");
 const orderSchema = new mongoose.Schema({
 
     user: { type: mongoose.SchemaTypes.ObjectId, ref: "User", required: true },
-    // adress: {type:mongoose.SchemaTypes.ObjectId,ref:"Adress",required:true},
+    adress: {
+        country: { type: String, required: true },
+        city: { type: String, required: true },
+        street: { type: String, required: true },
+        zipcode: { type: Number, required: true },
+        building: String,
+        Apartment: String
+    },
     createDate: { default: Date.now(), immutable: true },
     items: [{
         item: { type: mongoose.SchemaTypes.ObjectId, ref: "Product", required: true },
