@@ -19,14 +19,29 @@ mongoose
     console.log(err);
   });
 
-  app.use(express.json());
+app.use(express.json());
 
-  app.use("/api/auth", authRoute);
-  app.use("/api/users", userRoute);
-  app.use("/api/products", productRoute);
-  app.use("/api/orders", orderRoute);
-  app.use("/api/carts", cartRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/users", userRoute);
+app.use("/api/products", productRoute);
+app.use("/api/orders", orderRoute);
+app.use("/api/carts", cartRoute);
+
+app.use((req, res, next) => {
+  const err = new Error("Not Found");
+  err.status(404);
+  next(err);
+});
+
+app.use((err, req, res, next) => {
+  res.status(err.status || 500);
+  res.json({
+    error: {
+      message: error.message
+    }
+  })
+});
 
 app.listen(PORT, () => {
-    console.log(`Server is Running on Port ${PORT}`)
+  console.log(`Server is Running on Port ${PORT}`)
 })
