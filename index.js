@@ -1,15 +1,19 @@
 const express = require("express");
 const app = express();
+const mongoose = require("mongoose");
 const userRoute = require("./routes/user");
 const productRoute = require("./routes/product");
 const orderRoute = require("./routes/order");
 const cartRoute = require("./routes/cart");
 const authRoute = require("./routes/auth");
+require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
+const MONGO_URL = process.env.MONGO_URL;
 
+mongoose.set("strictQuery", false);
 mongoose
-  .connect(process.env.MONGO_URL)
+  .connect(MONGO_URL)
   .then(() => console.log("DB Connection Success."))
   .catch((err) => {
     console.log(err);
