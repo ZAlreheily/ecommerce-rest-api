@@ -6,6 +6,8 @@ const productRoute = require("./routes/product");
 const orderRoute = require("./routes/order");
 const cartRoute = require("./routes/cart");
 const authRoute = require("./routes/auth");
+const notFoundError = require("./middlewares/NotFoundError");
+const errorHandler = require("./middlewares/ErrorHandler");
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
@@ -27,20 +29,8 @@ app.use("/api/products", productRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/carts", cartRoute);
 
-app.use((req, res, next) => {
-  const err = new Error("Not Found");
-  err.status(404);
-  next(err);
-});
-
-app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.json({
-    error: {
-      message: error.message
-    }
-  })
-});
+app.use(notFoundError);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is Running on Port ${PORT}`)
