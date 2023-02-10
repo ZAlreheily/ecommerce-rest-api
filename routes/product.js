@@ -60,9 +60,10 @@ router.delete("/:id", async (req, res, next) => {
     }
 });
 
-router.put("/id", async (req, res, next) => {
+router.put("/:id", async (req, res, next) => {
     const productId = req.params.id;
     const newDetails = req.body;
+    console.log(newDetails)
     const isValidId = mongoose.isValidObjectId(productId);
 
     if (!isValidId) {
@@ -70,10 +71,11 @@ router.put("/id", async (req, res, next) => {
         err.status = 400;
         return next(err);
     }
+    
     try {
         const newProduct = await Product.findByIdAndUpdate(
             productId,
-            { $set: { newDetails } },
+            { $set: newDetails },
             {
                 runValidators: true,
                 new: true,
