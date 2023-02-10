@@ -35,11 +35,32 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", async (req, res, next) => {
+    const productId = req.params.id;
+    const isValidId = mongoose.isValidObjectId(productId);
 
+    if (!isValidId) {
+        const err = new Error("ID is not valid.");
+        err.status = 400;
+        return next(err);
+    }
+
+    try {
+        const response = await Product.findByIdAndDelete(productId);
+
+        if (response == null) {
+            const err = new Error("Product with that ID is not found.");
+            err.status = 404;
+            return next(err);
+        }
+
+        res.status(200).send(response)
+    } catch (err) {
+        next(err);
+    }
 });
 
-router.put("/id", (req, res) => {
+router.put("/id", async (req, res, next) => {
 
 });
 
