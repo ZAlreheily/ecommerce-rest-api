@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Product = require("../models/Product");
 const mongoose = require("mongoose");
+const { idFormatError, productNotFoundError } = require("../helpers/dbHelper");
 
 router.get("/", async (req, res) => {
     const allProducts = await Product.find();
@@ -12,9 +13,7 @@ router.get("/:id", async (req, res, next) => {
     const isValidId = mongoose.isValidObjectId(productId)
 
     if (!isValidId) {
-        const err = new Error("ID is not valid.");
-        err.status = 400;
-        return next(err);
+        return next(idFormatError());
     }
 
     try {
@@ -40,18 +39,14 @@ router.delete("/:id", async (req, res, next) => {
     const isValidId = mongoose.isValidObjectId(productId);
 
     if (!isValidId) {
-        const err = new Error("ID is not valid.");
-        err.status = 400;
-        return next(err);
+        return next(idFormatError());
     }
 
     try {
         const response = await Product.findByIdAndDelete(productId);
 
         if (response == null) {
-            const err = new Error("Product with that ID is not found.");
-            err.status = 404;
-            return next(err);
+            return next(productNotFoundError());
         }
 
         res.status(200).send(response)
@@ -63,17 +58,14 @@ router.delete("/:id", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
     const productId = req.params.id;
     const newDetails = req.body;
-    console.log(newDetails)
     const isValidId = mongoose.isValidObjectId(productId);
 
     if (!isValidId) {
-        const err = new Error("ID is not valid.");
-        err.status = 400;
-        return next(err);
+        return next(idFormatError());
     }
-    
+
     try {
-        const newProduct = await Product.findByIdAndUpdate(
+        const response = await Product.findByIdAndUpdate(
             productId,
             { $set: newDetails },
             {
@@ -81,6 +73,11 @@ router.put("/:id", async (req, res, next) => {
                 new: true,
             }
         );
+
+        if (response == null) {
+            return next(productNotFoundError());
+        }
+
         res.status(200).json(newProduct);
     } catch (err) {
         next(err);
