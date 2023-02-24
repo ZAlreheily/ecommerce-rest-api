@@ -2,22 +2,57 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
 
-    user: { type: mongoose.SchemaTypes.ObjectId, ref: "User", required: true },
-    adress: {
-        country: { type: String, required: true },
-        city: { type: String, required: true },
-        street: { type: String, required: true },
-        zipcode: { type: Number, required: true },
+    user: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "User",
+        required: true
+    },
+    address: {
+        country: {
+            type: String,
+            required: true
+        },
+        city: {
+            type: String,
+            required: true
+        },
+        street: {
+            type: String,
+            required: true
+        },
+        zipcode: {
+            type: Number,
+            required: true
+        },
         building: String,
         Apartment: String
     },
-    createDate: { default: Date.now(), immutable: true },
+    createDate: {
+        type: Number,
+        default: Date.now(),
+        immutable: true
+    },
     items: [{
-        item: { type: mongoose.SchemaTypes.ObjectId, ref: "Product", required: true },
-        price: { type: Number, required: true, immutable: true },
-        quantity: { type: Number, required: true, default: 1 }
+        item: {
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: "Product",
+            required: true
+        },
+        price: {
+            type: Number,
+            required: true,
+            immutable: true
+        },
+        quantity: {
+            type: Number,
+            required: true,
+            default: 1
+        }
     }],
-    status: { type: String, default: "in progress" }
+    status: {
+        type: String,
+        default: "in progress"
+    }
 
 });
 
@@ -30,4 +65,4 @@ orderSchema.virtual("total").get(function () {
 });
 
 
-module.exports = mongoose.Schema("Order", orderSchema);
+module.exports = mongoose.model("Order", orderSchema);
