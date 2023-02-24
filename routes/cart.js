@@ -1,13 +1,15 @@
-const router = require("express").Router();
-const Cart = require("../models/Cart");
+const router = require('express').Router();
+const Cart = require('../models/Cart');
+const authMiddleware = require('../middlewares/authMiddleware');
 
-router.get("/", async (req, res, next) => {
-    const userID = "";         // To be Implemented
+
+router.get('/', authMiddleware, async (req, res, next) => {
+    const userID = req.user;
 
     try {
         const response = await Cart.findOne({ user: userID });
         if (response == null) {
-            const err = new Error("Could not user with that ID");
+            const err = new Error('Could not user with that ID');
             err.status = 404;
             return next(err);
         }
@@ -17,8 +19,8 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-router.post("/", async (req, res, next) => {
-    const userID = "";         // To be Implemented
+router.post('/', authMiddleware, async (req, res, next) => {
+    const userID = req.user;
     const newDetails = req.body;
     try {
         const response = await Cart.findOneAndUpdate(
@@ -31,7 +33,7 @@ router.post("/", async (req, res, next) => {
         );
 
         if (response == null) {
-            const err = new Error("Could not user with that ID");
+            const err = new Error('Could not user with that ID');
             err.status = 404;
             return next(err);
         }
@@ -41,14 +43,14 @@ router.post("/", async (req, res, next) => {
     }
 });
 
-router.delete("/:id", async (req, res) => {
-    const userID = "";         // To be Implemented
+router.delete('/:id', authMiddleware, async (req, res) => {
+    const userID = req.user;
 
     try {
         const response = await Cart.findOneAndDelete({ user: userID });
 
         if (response == null) {
-            const err = new Error("Could not user with that ID");
+            const err = new Error('Could not user with that ID');
             err.status = 404;
             return next(err);
         }
