@@ -25,7 +25,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.post('/signup', async (req, res) => {
+router.post('/signup', async (req, res, next) => {
     const { firstName, lastName, email, password } = req.body;
     const validEmail = validation.isValidEmail(email);
     if (!validEmail) {
@@ -40,8 +40,17 @@ router.post('/signup', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 13);
-    await User.create({ firstName, lastName, email, password: hashedPassword })
-    res.json({ messege: 'user has been registered.' });
+    try {
+
+        await User.create({ firstName, lastName, email, password: hashedPassword })
+        res.status(201).json({ messege: 'user has been registered.' });
+    } catch (err) {
+        if (err.code === 11000) {
+            const error = new Error("Email already exists.");
+            error.status = 401;
+            next(error);
+        }
+    }
 });
 
 module.exports = router;

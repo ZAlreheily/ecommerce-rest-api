@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    adress: {
+    address: {
         country: {
             type: String,
             required: true
@@ -28,6 +28,7 @@ const orderSchema = new mongoose.Schema({
         Apartment: String
     },
     createDate: {
+        type: Number,
         default: Date.now(),
         immutable: true
     },
@@ -64,4 +65,4 @@ orderSchema.virtual("total").get(function () {
 });
 
 
-module.exports = mongoose.Schema("Order", orderSchema);
+module.exports = mongoose.model("Order", orderSchema);
