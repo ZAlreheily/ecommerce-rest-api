@@ -20,14 +20,19 @@ router.post('/', authMiddleware, async (req, res, next) => {
     try {
         const cart = await Cart.findOne({ user: userID });
         const products = cart.products;
+        let modifiedProduct;
+
         products.forEach(async (product) => {
             if (product.itemId == productID) {
                 product.quantity += 1;
-                await cart.save();
-                res.status(201).json(cart);
+                modifiedProduct = product;
             }
         });
-        cart.products.push({ itemId: productID, quantity: 1 });
+
+        if (!modifiedProduct) {
+            cart.products.push({ itemId: productID, quantity: 1 });
+        }
+
         await cart.save()
         res.status(201).json(cart);
     } catch (err) {
@@ -46,7 +51,7 @@ router.delete('/:productID', authMiddleware, async (req, res, next) => {
         let deletedProduct;
         products.forEach(async (product) => {
             if (product.itemId == productID) {
-                return deletedProduct = product;
+                deletedProduct = product;
             }
         });
 
@@ -57,10 +62,10 @@ router.delete('/:productID', authMiddleware, async (req, res, next) => {
             res.status(200).json(cart);
 
         } else {
-            
-                    const error = new Error('No item with that id is in cart.');
-                    error.status = 401;
-                    next(error);
+
+            const error = new Error('No item with that id is in cart.');
+            error.status = 401;
+            next(error);
         }
 
     } catch (err) {
