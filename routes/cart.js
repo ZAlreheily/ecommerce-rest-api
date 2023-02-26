@@ -8,11 +8,6 @@ router.get('/', authMiddleware, async (req, res, next) => {
 
     try {
         const response = await Cart.findOne({ user: userID });
-        if (response == null) {
-            const err = new Error('Could not user with that ID');
-            err.status = 404;
-            return next(err);
-        }
         res.status(200).json(response);
     } catch (err) {
         next(err);
@@ -21,40 +16,53 @@ router.get('/', authMiddleware, async (req, res, next) => {
 
 router.post('/', authMiddleware, async (req, res, next) => {
     const userID = req.user;
-    const newDetails = req.body;
+    const { productID } = req.body;
     try {
-        const response = await Cart.findOneAndUpdate(
-            { user: userID },
-            { $set: newDetails },
-            {
-                runValidators: true,
-                new: true,
+        const cart = await Cart.findOne({ user: userID });
+        const products = cart.products;
+        products.forEach(async (product) => {
+            if (product.itemId == productID) {
+                product.quantity += 1;
+                await cart.save();
+                res.status(201).json(cart);
             }
-        );
-
-        if (response == null) {
-            const err = new Error('Could not user with that ID');
-            err.status = 404;
-            return next(err);
-        }
-        res.status(201).json(response);
+        });
+        cart.products.push({ itemId: productID, quantity: 1 });
+        await cart.save()
+        res.status(201).json(cart);
     } catch (err) {
         next(err);
     }
 });
 
-router.delete('/:id', authMiddleware, async (req, res) => {
+router.delete('/:productID', authMiddleware, async (req, res, next) => {
     const userID = req.user;
+    const { productID } = req.body;
 
     try {
-        const response = await Cart.findOneAndDelete({ user: userID });
 
-        if (response == null) {
-            const err = new Error('Could not user with that ID');
-            err.status = 404;
-            return next(err);
+        const cart = await Cart.findOne({ user: userID });
+        const products = cart.products;
+        let deletedProduct;
+        products.forEach(async (product) => {
+            if (product.itemId == productID) {
+                return deletedProduct = product;
+            }
+        });
+
+        if (deletedProduct) {
+            const index = products.indexOf(deletedProduct);
+            cart.products.splice(index, 1);
+            await cart.save();
+            res.status(200).json(cart);
+
+        } else {
+            
+                    const error = new Error('No item with that id is in cart.');
+                    error.status = 401;
+                    next(error);
         }
-        res.status(200).json(response);
+
     } catch (err) {
         next(err);
     }
