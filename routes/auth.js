@@ -17,7 +17,8 @@ router.post('/login', async (req, res) => {
     const matchPassword = await bcrypt.compare(password, userPassword);
     if (email === userEmail && matchPassword) {
         const payload = { userID };
-        const token = jwt.sign(payload, JWT_SECRET);
+        const tokenOptions = { expiresIn: 1800 };
+        const token = jwt.sign(payload, JWT_SECRET, tokenOptions);
         res.cookie('jwt', token);
         res.json({ message: 'Login successful' });
     } else {
