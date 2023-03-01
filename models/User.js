@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Cart = require("./Cart");
 
 const userSchema = new mongoose.Schema({
     firstName: String,
@@ -38,5 +39,9 @@ const userSchema = new mongoose.Schema({
         immutable: true
     }
 })
+
+userSchema.post('init', function (doc) {
+    Cart.create({ user: doc._id });
+});
 
 module.exports = mongoose.model("User", userSchema);
