@@ -10,15 +10,14 @@ router.get('/', authMiddleware, async (req, res, next) => {
 
 router.get('/:orderID', authMiddleware, async (req, res, next) => {
     const userID = req.user;
-    const { orderID } = req.body;
+    const { orderID } = req.params;
     try {
-     const order = await Order.findOne({ __id: orderID });
-        if (userID !== order.user){
+     const order = await Order.findOne({ _id: orderID });
+        if (userID != order.user){
             const err = new Error('You are not authorized to get order information.');
             err.status = 403;
             return next(err);
         }
-    
         res.status(200).json(order);
     } catch (err){
         next(err);
