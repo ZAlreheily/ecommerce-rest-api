@@ -40,12 +40,12 @@ Finally, start the server using the following command:
 ## Endpoints
 The API provides the following endpoints:
 
-## Authentication
+### Authentication
 
 * `POST /api/auth/signup` - signup as a new user.
 * `POST /api/auth/login` - returns a jwt if information is correct.
 
-## Products
+### Products
 
 * `GET /api/products` - Returns a list of all prouducts.
 * `GET /api/products/:id` - Returns a specific product by ID. 
@@ -53,13 +53,13 @@ The API provides the following endpoints:
 * `PUT /api/products/:id` - Update a specific product.
 * `DELETE /api/products/:id` - Delete a specific product.
 
-## Cart
+### Cart
 
 * `GET /api/cart` - Returns the cart of user. 
 * `POST /api/cart` - Add a new product to cart.
 * `Delete /api/cart/:productID` - Delete a specific product from cart.
 
-## Orders
+### Orders
 
 * `GET /api/orders` - Returns a list of all orders.
 * `GET /api/orders/orderID` - Return a specific order.
