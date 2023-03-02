@@ -1,6 +1,6 @@
 # eCommerce-rest-api
 
-This is an eCommerce REST API built using Node.js, Express. It provides various endpoints for managing products, categories, and orders.
+This is an eCommerce REST API built using Node.js, Express. It provides various endpoints for managing products, cart, and orders.
 
 > Uses MongoDB as a database and authentication with (jwt).
 
@@ -37,6 +37,33 @@ Finally, start the server using the following command:
 ```
 > npm start
 ```
-##Endpoints
+## Endpoints
 The API provides the following endpoints:
 
+## Authentication
+
+* `POST /api/auth/signup` - signup as a new user.
+* `POST /api/auth/login` - returns a jwt if information is correct.
+
+## Products
+
+* `GET /api/products` - Returns a list of all prouducts.
+* `GET /api/products/:id` - Returns a specific product by ID. 
+* `POST /api/products` - Add a new product.
+* `PUT /api/products/:id` - Update a specific product.
+* `DELETE /api/products/:id` - Delete a specific product.
+
+## Cart
+
+* `GET /api/cart` - Returns the cart of user. 
+* `POST /api/cart` - Add a new product to cart.
+* `Delete /api/cart/:productID` - Delete a specific product from cart.
+
+## Orders
+
+* `GET /api/orders` - Returns a list of all orders.
+* `GET /api/orders/orderID` - Return a specific order.
+* `POST /api/orders` - Create a new order.
+
+## Contributing
+Contributions are welcome! If you want to contribute to the project, please create a new branch and submit a pull request.
