@@ -22,7 +22,7 @@ To get started, you need to clone the repository to your local machine:
 After cloning the repository, navigate to the project directory and install the dependencies:
 
 ```
-> cd ecommerce-api
+> cd ecommerce-rest-api
 > npm install
 ```
 Before starting the server, you need to set up the environment variables. Create a new file named `.env` in the root directory and add the following variables:
@@ -42,8 +42,8 @@ The API provides the following endpoints:
 
 ### Authentication
 
-* `POST /api/auth/signup` - signup as a new user.
-* `POST /api/auth/login` - returns a jwt if information is correct.
+* `POST /api/auth/signup` - Signup as a new user.
+* `POST /api/auth/login` - Returns a jwt if information is correct.
 
 ### Products
 
